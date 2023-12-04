@@ -31,7 +31,29 @@ var numeric = ["1", "2", "3", "4", "5"];
 for (var i = 0; i < intg.length; i ++) {
   console.log("Password Generator")
 };
- 
+
+function passwordPrompt() {
+  var length = parseInt (
+    window.prompt("How long would you like your password?"),
+  );
+
+  if (Number.isNaN(length)) {
+    window.alert("ERROR: Password length must be entered with numbers");
+    return;
+  }
+
+  if (length > 128) {
+  window.alert("ERROR: Password length must be less than 129 characters");
+  return;
+};
+
+if (length < 8) {
+window.alert("ERROR: Password length must contain more than 7 characters");
+return;
+};
+}
+
+
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
