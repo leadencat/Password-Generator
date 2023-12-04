@@ -17,9 +17,21 @@ WHEN the password is generated
 THEN the password is either displayed in an alert or written to the page
 ``` 
 
+// for (expression 1; expression 2; expression 3) {
+  // code block to be executed
+
 
 var generateBtn = document.querySelector("#generate");
 
+var uppercase = ["A","B", "C", "D", "E", "F", "G"];
+var lowercase = ["a", "b", "c", "d", "e", "f", "g"];
+var special = ["!", "@", "*", "+", "."];
+var numeric = ["1", "2", "3", "4", "5"];
+
+for (var i = 0; i < intg.length; i ++) {
+  console.log("Password Generator")
+};
+ 
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
