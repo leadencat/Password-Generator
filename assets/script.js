@@ -1,67 +1,121 @@
-// Assignment Code
-```
-GIVEN I need a new, secure password
-WHEN I click the button to generate a password
-THEN I am presented with a series of prompts for password criteria
-WHEN prompted for password criteria
-THEN I select which criteria to include in the password
-WHEN prompted for the length of the password
-THEN I choose a length of at least 8 characters and no more than 128 characters
-WHEN asked for character types to include in the password
-THEN I confirm whether or not to include lowercase, uppercase, numeric, and/or special characters
-WHEN I answer each prompt
-THEN my input should be validated and at least one character type should be selected
-WHEN all prompts are answered
-THEN a password is generated that matches the selected criteria
-WHEN the password is generated
-THEN the password is either displayed in an alert or written to the page
-``` 
 
-// for (expression 1; expression 2; expression 3) {
-  // code block to be executed
-
-
-var generateBtn = document.querySelector("#generate");
-
-var uppercase = ["A","B", "C", "D", "E", "F", "G"];
-var lowercase = ["a", "b", "c", "d", "e", "f", "g"];
+// array options
+var capitalLetters = ["A", "B", "C", "D", "E", "F", "G"];
+var lowerLetters = ["a", "b", "c", "d", "e", "f", "g"];
 var special = ["!", "@", "*", "+", "."];
 var numeric = ["1", "2", "3", "4", "5"];
 
-for (var i = 0; i < intg.length; i ++) {
-  console.log("Password Generator")
-};
-
 function passwordPrompt() {
-  var length = parseInt (
+  var length = parseInt(
     window.prompt("How long would you like your password?"),
   );
 
+  // funtions correcting right password length/type
   if (Number.isNaN(length)) {
     window.alert("ERROR: Password length must be entered with numbers");
     return;
-  }
+  };
 
   if (length > 128) {
-  window.alert("ERROR: Password length must be less than 129 characters");
-  return;
-};
+    window.alert("ERROR: Password length must be less than 129 characters");
+    return;
+  };
 
-if (length < 8) {
-window.alert("ERROR: Password length must contain more than 7 characters");
-return;
-};
+  if (length < 8) {
+    window.alert("ERROR: Password length must contain more than 7 characters");
+    return;
+  };
+
+  // array seletions for preffered password
+  var lowerCase = confirm("If you would like lowercase letters, press OK");
+  var upperCase = confirm("If you would like uppercase letters, press OK");
+  var incNumbers = confirm("If you would like numbers, press OK");
+  var incSpecial = confirm("If you would like symbols, press OK");
+
+  if (
+    lowerCase === false &&
+    upperCase === false &&
+    incSpecial === false &&
+    incNumbers === false
+  ) {
+    window.alert("Must have one or more character types");
+    return;
+  }
+
+  var userInput = {
+    length: length,
+    lowerCase: lowerCase,
+    upperCase: upperCase,
+    incNumbers: incNumbers,
+    incSpecial: incSpecial,
+  };
+  return userInput;
 }
 
+// Calling on random array based on previous function selections
+function randomize(arr) {
+  var Index = Math.floor(Math.random() * arr.length);
+  var randomArray = arr[Index];
+  return randomArray;
+}
 
-// Write password to the #password input
+// Function to choose letters, numbers or symbols based on user choice, includes at least one at random from each selected
+function passwordGen() {
+  var totalOptions = passwordPrompt();
+  var results = [];
+  var totalCharacters = [];
+  var inputCharacters = [];
+
+  // If they did not select anything, return to the main generator
+  if (!totalOptions)
+    return;
+
+
+  // Checking if lowercase was selected, if so, adding those characters from array
+  if (totalOptions.lowerCase) {
+    totalCharacters = totalCharacters.concat(lowerLetters);
+    inputCharacters.push(randomize(lowerLetters));
+  }
+
+  // Checking if uppsercase was selected, if so, adding those characters from array 
+  if (totalOptions.upperCase) {
+    totalCharacters = totalCharacters.concat(capitalLetters);
+    inputCharacters.push(randomize(capitalLetters));
+  }
+
+  // Checking if numbers were selected, if so, adding those characters from array
+  if (totalOptions.incNumbers) {
+    totalCharacters = totalCharacters.concat(numeric);
+    inputCharacters.push(randomize(numeric));
+  }
+
+  // Checking if symbols were selected, if so, adding those characters from array
+  if (totalOptions.incSpecial) {
+    totalCharacters = totalCharacters.concat(special);
+    inputCharacters.push(randomize(special));
+  }
+
+  for (var i = 0; i < totalOptions.length; i++) {
+    var generated = randomize(totalCharacters);
+    results.push(generated);
+  }
+  for (var i = 0; i < inputCharacters.length; i++) {
+    results[i] = inputCharacters[i];
+  }
+  return results.join("");
+
+}
+
+var generateBtn = document.querySelector("#generate");
+
+//  #password input
 function writePassword() {
-  var password = generatePassword();
+  var password = passwordGen();
   var passwordText = document.querySelector("#password");
 
   passwordText.value = password;
 
 }
 
-// Add event listener to generate button
+//event listener
 generateBtn.addEventListener("click", writePassword);
